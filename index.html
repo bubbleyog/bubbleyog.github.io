@@ -173,6 +173,87 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://example.com/2025/05/11/%E6%80%9D%E6%BA%90%E7%AC%94%E8%AE%B0%E6%90%AD%E5%BB%BA%E7%9A%84%E4%B8%80%E4%BA%9B%E7%BB%8F%E9%AA%8C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/icon.png">
+      <meta itemprop="name" content="量子态的犹格Yog">
+      <meta itemprop="description" content="B站@量子态的犹格Yog，关于物理学、数学和计算机。联系作者：bubbleyog@outlook.com">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="量子态的犹格Yog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/05/11/%E6%80%9D%E6%BA%90%E7%AC%94%E8%AE%B0%E6%90%AD%E5%BB%BA%E7%9A%84%E4%B8%80%E4%BA%9B%E7%BB%8F%E9%AA%8C/" class="post-title-link" itemprop="url">思源笔记搭建的一些经验</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2025-05-11 06:50:58 / 修改时间：07:12:55" itemprop="dateCreated datePublished" datetime="2025-05-11T06:50:58+08:00">2025-05-11</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>最近在云服务器上搭建了私有部署的思源笔记，初始体验还不错，等用一段时间后会出体验分享。至于教程网上都有，这里就不专门写了。</p>
+<p>这里先说几个问题：</p>
+<ol>
+<li>笔记使用的时候有时候会提示出问题，这个一般是网络问题，等几秒让它自行修复就行。</li>
+<li>思源笔记是用Docker部署的，这个会出什么问题懂的都懂，可以把docker的tar镜像下载下来然后本地导入。这一块可以用网上的一些下载工具，可以从docker hub上把文件搞下来，虽然也没那么好用。我的处理方法是用我的Linux物理机下载镜像。</li>
+<li>Docker容器不启动的问题。网上给出的命令很多时候没法启动容器，这是因为缺了一个授权码参数，把这个加上就行了。</li>
+</ol>
+<p>以下是操作流程：</p>
+<p>本地下载Docker镜像：<code>docker image pull b3log/siyuan:latest</code></p>
+<p>镜像提取到本地：<code>docker save b3log/siyuan:latest &gt; ./siyuan.tar</code></p>
+<p>然后把这个镜像传到你部署笔记的机器上去，可以用SFTP或者别的什么方法。</p>
+<p>到机器上加载镜像：<code>docker load -i siyuan.tar</code>，记得先cd到放镜像的路径下</p>
+<p>接下来是启动镜像，注意，这个地方网上给的命令很多是有问题的，因为缺少一个授权码参数</p>
+<p>实测可用的命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sudo docker run -d  \</span><br><span class="line">	-v /home/jupiter/siyuan/workspace:/siyuan/workspace  \</span><br><span class="line">    -p 6806:6806   \</span><br><span class="line">    b3log/siyuan \</span><br><span class="line">    --workspace=/siyuan/workspace \</span><br><span class="line">    --accessAuthCode=设置一个明文授权码</span><br></pre></td></tr></table></figure>
+
+<p>把授权码那里换成你想设置的登录密码就行。</p>
+<p>然后设置容器自动启动：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl enable docker</span><br><span class="line">sudo docker update --restart unless-stopped fbe971e27e2d</span><br></pre></td></tr></table></figure>
+
+<p>这样只要不手动关闭就会一直运行。</p>
+<p>然后就可以登录，打开浏览器访问<code>你的云服务器公网IP:6806</code>，是把冒号前面的换成说的内容哈</p>
+<p>然后输入授权码，就可以开始写笔记了。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://example.com/2025/05/10/%E5%85%B3%E4%BA%8E%E9%87%8F%E5%AD%90%E6%80%81%E7%9A%84%E7%8A%B9%E6%A0%BCYog/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -204,7 +285,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-05-11 04:29:31" itemprop="dateModified" datetime="2025-05-11T04:29:31+08:00">2025-05-11</time>
+                <time title="修改时间：2025-05-11 06:42:29" itemprop="dateModified" datetime="2025-05-11T06:42:29+08:00">2025-05-11</time>
               </span>
 
           
@@ -223,9 +304,11 @@
 <ul>
 <li>陈鄂生量子力学习题集题目分类讲解</li>
 <li>华为仓颉编程语言教程（基于公测版本）</li>
+<li>PINN物理信息神经网络教程</li>
 </ul>
-<p>对于视频中的问题，可以在评论区提出。如果有一些想深入交流的内容，由于平台功能限制可能不方便深聊，所以请通过电子邮件联系。视频中使用的资源会在up主的个人网站发布，欢迎访问并下载。up主另有一微信公众号，主要探讨一些马理论、马哲问题。</p>
-<p>邮箱：<a href="mailto:&#x62;&#x75;&#x62;&#98;&#108;&#101;&#x79;&#111;&#x67;&#x40;&#x6f;&#x75;&#116;&#x6c;&#x6f;&#111;&#x6b;&#x2e;&#x63;&#x6f;&#x6d;">&#x62;&#x75;&#x62;&#98;&#108;&#101;&#x79;&#111;&#x67;&#x40;&#x6f;&#x75;&#116;&#x6c;&#x6f;&#111;&#x6b;&#x2e;&#x63;&#x6f;&#x6d;</a></p>
+<p>对于视频中的问题，可以在评论区提出。如果有一些想深入交流的内容，欢迎通过电子邮件联系。视频中使用的资源文件会在up主的个人网站发布，欢迎访问并下载。另有一微信公众号，主要探讨一些马理论、马哲问题。</p>
+<p>B站：量子态的犹格Yog</p>
+<p>邮箱：<a href="mailto:&#98;&#x75;&#x62;&#x62;&#108;&#x65;&#121;&#x6f;&#103;&#64;&#x6f;&#117;&#x74;&#x6c;&#111;&#111;&#107;&#x2e;&#99;&#x6f;&#109;">&#98;&#x75;&#x62;&#x62;&#108;&#x65;&#121;&#x6f;&#103;&#64;&#x6f;&#117;&#x74;&#x6c;&#111;&#111;&#107;&#x2e;&#99;&#x6f;&#109;</a></p>
 <p>网站：<a target="_blank" rel="noopener" href="http://www.bubbleyog.top/">www.bubbleyog.top</a></p>
 <p>公众号：激发态的犹格Yog</p>
 
@@ -311,9 +394,13 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">1</span>
+          <span class="site-state-item-count">2</span>
           <span class="site-state-item-name">日志</span>
         </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">标签</span>
       </div>
   </nav>
 </div>
