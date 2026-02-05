@@ -1,0 +1,159 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import Footer from '../../components/Footer.astro';
+import { getAllCategories, getArticlesByCategory, getCategoryById } from '../../data/articles.js';
+
+// 生成所有分类的静态路径
+export function getStaticPaths() {
+  const categories = getAllCategories();
+  return categories.map(cat => ({
+    params: { id: cat.id },
+  }));
+}
+
+const { id } = Astro.params;
+const category = getCategoryById(id);
+const articles = getArticlesByCategory(id);
+
+// 格式化日期
+function formatDate(dateStr: string) {
+  const date = new Date(dateStr);
+  return date.toLocaleDateString('zh-CN', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+}
+---
+
+<Layout 
+  title={`${category.name} - Blog`}
+  description={category.description}
+>
+  <Header />
+  
+  <main class="category-page">
+    <!-- 分类头部 -->
+    <section class="category-header" style={`--category-color: ${category.color}`}>
+      <div class="container">
+        <div class="category-hero">
+          <span class="category-icon">{category.icon}</span>
+          <h1 class="category-title">{category.name}</h1>
+          <p class="category-description">{category.description}</p>
+          <span class="article-count">{articles.length} 篇文章</span>
+        </div>
+      </div>
+    </section>
+    
+    <!-- 文章列表 -->
+    <section class="articles-section">
+      <div class="container">
+        {articles.length > 0 ? (
+          <div class="articles-grid">
+            {articles.map(article => (
+              <ArticleCard article={article} />
+            ))}
+          </div>
+        ) : (
+          <div class="empty-state">
+            <p>该分类下暂无文章，敬请期待...</p>
+          </div>
+        )}
+        
+        <div class="back-link">
+          <a href="/" class="btn btn-secondary">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            <span>返回首页</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+  
+  <Footer />
+</Layout>
+
+<style define:vars={{ categoryColor: category.color }}>
+  .category-page {
+    padding-top: 70px;
+  }
+  
+  .category-header {
+    padding: 4rem 0;
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, color-mix(in srgb, var(--category-color) 10%, var(--bg-secondary)) 100%);
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  .category-hero {
+    text-align: center;
+  }
+  
+  .category-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    font-size: 2.5rem;
+    background: color-mix(in srgb, var(--category-color) 20%, transparent);
+    border-radius: var(--radius-lg);
+    margin-bottom: 1.5rem;
+  }
+  
+  .category-title {
+    font-size: 2.5rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .category-description {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto 1rem;
+  }
+  
+  .article-count {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: var(--bg-card);
+    border-radius: var(--radius-full);
+    font-size: 0.9rem;
+    color: var(--category-color);
+    font-weight: 500;
+  }
+  
+  .articles-section {
+    padding: 3rem 0;
+  }
+  
+  .articles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .empty-state {
+    text-align: center;
+    padding: 4rem 0;
+    color: var(--text-muted);
+  }
+  
+  .back-link {
+    text-align: center;
+    margin-top: 3rem;
+  }
+  
+  @media (max-width: 768px) {
+    .category-title {
+      font-size: 2rem;
+    }
+    
+    .articles-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

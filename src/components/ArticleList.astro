@@ -1,0 +1,86 @@
+---
+import ArticleCard from './ArticleCard.astro';
+import { getLatestArticles } from '../data/articles.js';
+
+export interface Props {
+  limit?: number;
+  showHeader?: boolean;
+}
+
+const { limit = 6, showHeader = true } = Astro.props;
+const articles = getLatestArticles(limit);
+---
+
+<section class="articles-section">
+  <div class="container">
+    {showHeader && (
+      <div class="section-header">
+        <h2 class="section-title">
+          最新 <span class="gradient-text">文章</span>
+        </h2>
+        <p class="section-description">
+          分享技术见解、学习心得和思考感悟
+        </p>
+      </div>
+    )}
+    
+    <div class="articles-grid">
+      {articles.map(article => (
+        <ArticleCard article={article} />
+      ))}
+    </div>
+    
+    {showHeader && (
+      <div class="view-all">
+        <a href="/articles" class="btn btn-secondary">
+          <span>查看全部文章</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+    )}
+  </div>
+</section>
+
+<style>
+  .articles-section {
+    padding: 4rem 0;
+  }
+  
+  .section-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  
+  .section-title {
+    font-size: 2.25rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .section-description {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+  }
+  
+  .articles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .view-all {
+    text-align: center;
+    margin-top: 3rem;
+  }
+  
+  @media (max-width: 768px) {
+    .articles-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .section-title {
+      font-size: 1.75rem;
+    }
+  }
+</style>

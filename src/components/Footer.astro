@@ -2,10 +2,12 @@
 const currentYear = new Date().getFullYear();
 
 const footerLinks = [
-  { label: '首页', href: '#hero' },
-  { label: '关于', href: '#about' },
-  { label: '项目', href: '#projects' },
-  { label: '联系', href: '#contact' },
+  { label: '首页', href: '/' },
+  { label: '物理', href: '/category/physics' },
+  { label: '计算机', href: '/category/computer' },
+  { label: '深度学习', href: '/category/deeplearning' },
+  { label: '杂谈', href: '/category/misc' },
+  { label: '关于', href: '/about' },
 ];
 
 const socialLinks = [
@@ -31,18 +33,18 @@ const socialLinks = [
   <div class="container">
     <div class="footer-content">
       <div class="footer-brand">
-        <a href="#" class="footer-logo">
-          <span class="gradient-text">Portfolio</span>
+        <a href="/" class="footer-logo">
+          <span class="gradient-text">Blog</span>
         </a>
         <p class="footer-description">
-          创造美观且功能强大的数字体验，让你的想法变为现实。
+          记录学习物理、计算机、深度学习的心得与思考。
         </p>
       </div>
       
       <nav class="footer-nav">
-        <h4 class="footer-heading">快速链接</h4>
+        <h4 class="footer-heading">分类</h4>
         <ul class="footer-links">
-          {footerLinks.map(link => (
+          {footerLinks.slice(1, 5).map(link => (
             <li><a href={link.href} class="footer-link">{link.label}</a></li>
           ))}
         </ul>
@@ -65,10 +67,10 @@ const socialLinks = [
     
     <div class="footer-bottom">
       <p class="copyright">
-        © {currentYear} Your Name. All rights reserved.
+        © {currentYear} Blog. All rights reserved.
       </p>
       <p class="credits">
-        Made with ❤️ using <a href="https://astro.build" target="_blank" rel="noopener">Astro</a>
+        Built with <a href="https://astro.build" target="_blank" rel="noopener">Astro</a>
       </p>
     </div>
   </div>
@@ -90,7 +92,7 @@ const socialLinks = [
   
   .footer-logo {
     font-size: 1.5rem;
-    font-weight: 700;
+    font-weight: 800;
     text-decoration: none;
   }
   
