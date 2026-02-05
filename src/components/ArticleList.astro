@@ -1,6 +1,5 @@
 ---
 import ArticleCard from './ArticleCard.astro';
-import { getLatestArticles } from '../data/articles.js';
 
 export interface Props {
   limit?: number;
@@ -8,7 +7,27 @@ export interface Props {
 }
 
 const { limit = 6, showHeader = true } = Astro.props;
-const articles = getLatestArticles(limit);
+
+// 直接从 Markdown 文件读取文章
+const markdownFiles = await Astro.glob('../content/articles/*.md');
+
+const articles = markdownFiles
+  .map((file) => {
+    const pathParts = file.file?.split('/') || [];
+    const filename = pathParts[pathParts.length - 1] || '';
+    const id = filename.replace('.md', '');
+    
+    return {
+      id,
+      title: file.frontmatter?.title || '无标题',
+      category: file.frontmatter?.category || 'misc',
+      date: file.frontmatter?.date || new Date().toISOString().split('T')[0],
+      description: file.frontmatter?.description || '',
+      tags: file.frontmatter?.tags || [],
+    };
+  })
+  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+  .slice(0, limit);
 ---
 
 <section class="articles-section">

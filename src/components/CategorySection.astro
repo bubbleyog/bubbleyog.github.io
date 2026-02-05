@@ -1,7 +1,17 @@
 ---
-import { getAllCategories, getArticlesByCategory } from '../data/articles.js';
+import { getAllCategories } from '../data/articles.js';
 
 const categories = getAllCategories();
+
+// 从 Markdown 文件读取文章统计
+const markdownFiles = await Astro.glob('../content/articles/*.md');
+
+// 计算每个分类的文章数量
+const categoryCount = {};
+markdownFiles.forEach((file) => {
+  const category = file.frontmatter?.category || 'misc';
+  categoryCount[category] = (categoryCount[category] || 0) + 1;
+});
 ---
 
 <section class="categories-section">
@@ -17,7 +27,7 @@ const categories = getAllCategories();
     
     <div class="categories-grid">
       {categories.map(category => {
-        const articleCount = getArticlesByCategory(category.id).length;
+        const articleCount = categoryCount[category.id] || 0;
         return (
           <a href={`/category/${category.id}`} class="category-card" style={`--category-color: ${category.color}`}>
             <div class="category-icon-wrapper">

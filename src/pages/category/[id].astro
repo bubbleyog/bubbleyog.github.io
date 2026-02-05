@@ -3,7 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
 import ArticleCard from '../../components/ArticleCard.astro';
 import Footer from '../../components/Footer.astro';
-import { getAllCategories, getArticlesByCategory, getCategoryById } from '../../data/articles.js';
+import { getAllCategories, getCategoryById } from '../../data/articles.js';
 
 // 生成所有分类的静态路径
 export function getStaticPaths() {
@@ -15,7 +15,27 @@ export function getStaticPaths() {
 
 const { id } = Astro.params;
 const category = getCategoryById(id);
-const articles = getArticlesByCategory(id);
+
+// 直接从 Markdown 文件读取该分类的文章
+const markdownFiles = await Astro.glob('../../content/articles/*.md');
+
+const articles = markdownFiles
+  .map((file) => {
+    const pathParts = file.file?.split('/') || [];
+    const filename = pathParts[pathParts.length - 1] || '';
+    const articleId = filename.replace('.md', '');
+    
+    return {
+      id: articleId,
+      title: file.frontmatter?.title || '无标题',
+      category: file.frontmatter?.category || 'misc',
+      date: file.frontmatter?.date || new Date().toISOString().split('T')[0],
+      description: file.frontmatter?.description || '',
+      tags: file.frontmatter?.tags || [],
+    };
+  })
+  .filter(article => article.category === id)
+  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
 // 格式化日期
 function formatDate(dateStr: string) {

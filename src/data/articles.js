@@ -1,4 +1,5 @@
 // 文章数据管理
+// 从 Markdown 文件读取文章数据
 
 export const categories = {
   physics: {
@@ -31,58 +32,48 @@ export const categories = {
   },
 };
 
-// 示例文章数据
-export const articles = [
-  {
-    id: 'quantum-mechanics',
-    title: '量子力学的基本原理',
-    category: 'physics',
-    date: '2024-01-15',
-    description: '探索量子世界的奇妙现象，从波粒二象性到不确定性原理。',
-    tags: ['量子力学', '物理', '科学'],
-    content: '',
-  },
-  {
-    id: 'relativity-intro',
-    title: '相对论入门：时空的奥秘',
-    category: 'physics',
-    date: '2024-02-01',
-    description: '爱因斯坦的相对论如何改变了我们对时间和空间的理解。',
-    tags: ['相对论', '爱因斯坦', '物理'],
-    content: '',
-  },
-  {
-    id: 'distributed-systems',
-    title: '分布式系统设计的核心原则',
-    category: 'computer',
-    date: '2024-01-20',
-    description: '探讨构建高可用、可扩展分布式系统的关键概念和模式。',
-    tags: ['分布式系统', '架构', '系统设计'],
-    content: '',
-  },
-  {
-    id: 'neural-networks-intro',
-    title: '神经网络基础：从感知机到深度学习',
-    category: 'deeplearning',
-    date: '2024-01-10',
-    description: '深入理解神经网络的基本结构、训练原理和优化方法。',
-    tags: ['深度学习', '神经网络', '机器学习'],
-    content: '',
-  },
-  {
-    id: 'learning-method',
-    title: '如何高效学习：我的学习方法论',
-    category: 'misc',
-    date: '2024-02-05',
-    description: '分享我在学习新知识时总结的有效方法和心得体会。',
-    tags: ['学习方法', '效率', '成长'],
-    content: '',
-  },
-];
+// 文章数据数组（会被 loadArticlesFromMarkdown 填充）
+let articles = [];
+
+// 从 Markdown 文件加载文章数据
+// 注意：这个函数需要在 Astro 组件的 frontmatter 中调用
+export async function loadArticlesFromMarkdown() {
+  try {
+    // 使用动态导入来读取 Markdown 文件
+    const markdownFiles = import.meta.glob('../content/articles/*.md', { eager: true });
+    
+    const loadedArticles = [];
+    
+    for (const path in markdownFiles) {
+      const module = markdownFiles[path];
+      const frontmatter = module.frontmatter || {};
+      
+      // 从文件路径提取文章 ID
+      const id = path.replace('../content/articles/', '').replace('.md', '');
+      
+      loadedArticles.push({
+        id: id,
+        title: frontmatter.title || '无标题',
+        category: frontmatter.category || 'misc',
+        date: frontmatter.date || new Date().toISOString().split('T')[0],
+        description: frontmatter.description || '',
+        tags: frontmatter.tags || [],
+        content: module.default || '',
+      });
+    }
+    
+    articles = loadedArticles;
+    return loadedArticles;
+  } catch (error) {
+    console.error('加载 Markdown 文章失败:', error);
+    articles = [];
+    return [];
+  }
+}
 
 // 获取所有文章
 export function getAllArticles() {
-  return articles.sort((a, b) => new Date(b.date) - new Date(a.date));
+  return [...articles].sort((a, b) => new Date(b.date) - new Date(a.date));
 }
 
 // 根据分类获取文章

@@ -2,18 +2,40 @@
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
-import { getAllArticles, getArticleById, getCategoryById } from '../../data/articles.js';
+import { getCategoryById } from '../../data/articles.js';
+
+// 读取所有 Markdown 文章
+const markdownFiles = await Astro.glob('../../content/articles/*.md');
 
 // 生成所有文章的静态路径
-export function getStaticPaths() {
-  const articles = getAllArticles();
-  return articles.map(article => ({
-    params: { id: article.id },
-  }));
+export async function getStaticPaths() {
+  const articles = await Astro.glob('../../content/articles/*.md');
+  
+  return articles.map((article) => {
+    const pathParts = article.file?.split('/') || [];
+    const filename = pathParts[pathParts.length - 1] || '';
+    const id = filename.replace('.md', '');
+    
+    return {
+      params: { id },
+      props: {
+        article: {
+          id,
+          title: article.frontmatter?.title || '无标题',
+          category: article.frontmatter?.category || 'misc',
+          date: article.frontmatter?.date || new Date().toISOString().split('T')[0],
+          description: article.frontmatter?.description || '',
+          tags: article.frontmatter?.tags || [],
+        },
+        Content: article.default,
+      },
+    };
+  });
 }
 
+// 获取当前文章
 const { id } = Astro.params;
-const article = getArticleById(id);
+const { article, Content } = Astro.props;
 const category = getCategoryById(article.category);
 
 // 格式化日期
@@ -25,17 +47,6 @@ function formatDate(dateStr: string) {
     day: 'numeric',
   });
 }
-
-// 读取文章内容
-const articles = await Astro.glob('/src/content/articles/*.md');
-const currentArticle = articles.find(a => a.file.includes(id));
-
-// 如果找不到文章，返回404
-if (!currentArticle) {
-  return Astro.redirect('/404');
-}
-
-const { Content } = currentArticle;
 ---
 
 <Layout 
