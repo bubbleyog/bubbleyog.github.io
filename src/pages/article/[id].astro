@@ -27,9 +27,15 @@ function formatDate(dateStr: string) {
 }
 
 // 读取文章内容
-const articles = await Astro.glob('../../content/articles/*.md');
+const articles = await Astro.glob('/src/content/articles/*.md');
 const currentArticle = articles.find(a => a.file.includes(id));
-const { Content } = currentArticle || { Content: () => null };
+
+// 如果找不到文章，返回404
+if (!currentArticle) {
+  return Astro.redirect('/404');
+}
+
+const { Content } = currentArticle;
 ---
 
 <Layout 
@@ -62,7 +68,7 @@ const { Content } = currentArticle || { Content: () => null };
       
       <!-- 文章内容 -->
       <article class="article-content">
-        <Content />
+        {Content ? <Content /> : <p>文章内容加载失败</p>}
       </article>
       
       <!-- 文章底部 -->
