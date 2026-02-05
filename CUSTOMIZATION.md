@@ -1,6 +1,6 @@
 # 🎨 网站定制指南
 
-本文档帮助你了解如何定制这个 Astro 深色主题个人作品集网站。
+本文档帮助你了解如何定制这个基于 Astro 的深色主题博客网站。
 
 ---
 
@@ -9,31 +9,179 @@
 ```
 bubbleyog/
 ├── src/
-│   ├── components/      # 组件文件夹
-│   │   ├── Header.astro     # 导航头部
-│   │   ├── Hero.astro       # 首页主区域
-│   │   ├── About.astro      # 关于我
-│   │   ├── Projects.astro   # 项目展示
-│   │   ├── Skills.astro     # 技能专长
-│   │   ├── Contact.astro    # 联系方式
-│   │   └── Footer.astro     # 页脚
-│   ├── layouts/         # 布局文件夹
-│   │   └── Layout.astro     # 主布局
-│   ├── pages/           # 页面文件夹
-│   │   └── index.astro      # 首页
-│   └── styles/          # 样式文件夹
-│       └── global.css       # 全局样式
-├── .github/workflows/   # GitHub Actions
+│   ├── components/          # 组件文件夹
+│   │   ├── Header.astro         # 导航头部
+│   │   ├── Hero.astro           # 首页主区域
+│   │   ├── ArticleCard.astro    # 文章卡片
+│   │   ├── ArticleList.astro    # 文章列表
+│   │   ├── CategorySection.astro # 分类展示
+│   │   └── Footer.astro         # 页脚
+│   ├── content/
+│   │   └── articles/            # Markdown 文章存放目录
+│   │       ├── quantum-mechanics.md
+│   │       ├── relativity-intro.md
+│   │       ├── distributed-systems.md
+│   │       ├── neural-networks-intro.md
+│   │       └── learning-method.md
+│   ├── data/
+│   │   └── articles.js          # 文章数据配置
+│   ├── layouts/             # 布局文件夹
+│   │   └── Layout.astro         # 主布局
+│   ├── pages/               # 页面文件夹
+│   │   ├── index.astro          # 首页
+│   │   ├── about.astro          # 关于页面
+│   │   ├── category/
+│   │   │   └── [id].astro       # 分类页面（动态路由）
+│   │   └── article/
+│   │       └── [id].astro       # 文章详情页（动态路由）
+│   └── styles/              # 样式文件夹
+│       └── global.css           # 全局样式
+├── .github/workflows/       # GitHub Actions
 │   └── deploy.yml
-├── astro.config.mjs     # Astro 配置
-└── package.json
+├── astro.config.mjs         # Astro 配置
+├── package.json
+└── CUSTOMIZATION.md         # 本文件
+```
+
+---
+
+## 📝 发布新文章
+
+### 方法：两步添加新文章
+
+#### 第一步：创建 Markdown 文件
+
+在 `src/content/articles/` 目录下创建新的 `.md` 文件，文件名建议使用英文小写和连字符：
+
+```bash
+# 示例：创建一篇新文章
+src/content/articles/my-new-article.md
+```
+
+文件内容格式：
+
+```markdown
+---
+title: "文章标题"
+category: "physics"          # 可选：physics / computer / deeplearning / misc
+date: "2024-02-10"           # 发布日期
+description: "文章简介，会显示在卡片上"
+tags: ["标签1", "标签2", "标签3"]  # 文章标签
+---
+
+# 正文标题
+
+这里是文章正文内容，支持完整的 Markdown 语法。
+
+## 二级标题
+
+- 列表项 1
+- 列表项 2
+- 列表项 3
+
+### 代码块
+
+```javascript
+function hello() {
+  console.log("Hello, World!");
+}
+```
+
+### 引用
+
+> 这是一段引用文字
+
+### 链接
+
+[链接文字](https://example.com)
+
+### 强调
+
+**粗体文字** 和 *斜体文字*
+```
+
+#### 第二步：注册文章数据
+
+编辑 `src/data/articles.js`，在 `articles` 数组中添加文章信息：
+
+```javascript
+export const articles = [
+  // 已有文章...
+  
+  {
+    id: 'my-new-article',        // 必须与文件名一致（不含 .md）
+    title: '文章标题',
+    category: 'physics',         // 分类：physics/computer/deeplearning/misc
+    date: '2024-02-10',          // 日期
+    description: '文章简介，会显示在卡片上',
+    tags: ['标签1', '标签2'],   // 标签
+  },
+];
+```
+
+#### 第三步：提交并推送
+
+```bash
+cd bubbleyog
+git add .
+git commit -m "添加新文章：文章标题"
+git push origin main
+```
+
+等待 1-2 分钟后，网站会自动更新。
+
+---
+
+## 📂 文章分类说明
+
+网站有四大分类，在添加文章时选择对应的 `category`：
+
+| 分类 ID | 名称 | 图标 | 颜色 |
+|---------|------|------|------|
+| `physics` | 物理 | ⚛️ | 橙色 #f59e0b |
+| `computer` | 计算机 | 💻 | 蓝色 #3b82f6 |
+| `deeplearning` | 深度学习 | 🧠 | 紫色 #8b5cf6 |
+| `misc` | 杂谈 | ☕ | 绿色 #10b981 |
+
+### 添加新分类（高级）
+
+如需添加新分类，编辑 `src/data/articles.js`：
+
+```javascript
+export const categories = {
+  // 已有分类...
+  
+  newcategory: {
+    id: 'newcategory',
+    name: '新分类',
+    description: '分类描述',
+    icon: '🎯',              # Emoji 图标
+    color: '#ff6b6b',        # 主题色
+  },
+};
+```
+
+---
+
+## ✏️ 修改现有文章
+
+直接编辑 `src/content/articles/` 下的 Markdown 文件，修改后提交推送即可。
+
+```bash
+# 修改文章
+cd bubbleyog
+# 编辑 src/content/articles/xxx.md
+
+git add .
+git commit -m "更新文章：xxx"
+git push origin main
 ```
 
 ---
 
 ## 🎨 修改颜色主题
 
-所有颜色变量都在 `src/styles/global.css` 的 `:root` 中定义：
+所有颜色变量在 `src/styles/global.css` 的 `:root` 中定义：
 
 ```css
 :root {
@@ -82,122 +230,44 @@ bubbleyog/
 
 ---
 
-## 📝 修改个人信息
+## 🏠 修改首页内容
 
-### 1. 首页主区域 (Hero.astro)
+### 修改主标题和描述
 
-修改姓名和简介：
+编辑 `src/components/Hero.astro`：
 
 ```astro
-<!-- 第 15 行 -->
 <h1 class="hero-title">
-  你好，我是 <span class="gradient-text">你的名字</span>
+  探索知识的<br />
+  <span class="gradient-text">无限可能</span>
 </h1>
 
-<!-- 第 20 行 -->
 <p class="hero-subtitle">
-  你的职位 / 身份描述
-</p>
-
-<!-- 第 24 行 -->
-<p class="hero-description">
-  你的个人简介...
+  记录学习物理、计算机、深度学习的心得与思考
 </p>
 ```
 
-修改社交链接（第 44-60 行）：
+### 修改首页显示文章数量
+
+编辑 `src/pages/index.astro`：
 
 ```astro
-<a href="https://github.com/yourusername" class="social-icon" aria-label="GitHub">
+<!-- 显示 6 篇最新文章 -->
+<ArticleList limit={6} />
+
+<!-- 改为显示 10 篇 -->
+<ArticleList limit={10} />
 ```
-
-### 2. 关于我 (About.astro)
-
-修改统计数据（第 4-9 行）：
-
-```javascript
-const stats = [
-  { number: '5+', label: '年经验' },
-  { number: '100+', label: '完成项目' },
-  // ...
-];
-```
-
-修改个人介绍文字（第 20-30 行）。
-
-### 3. 项目展示 (Projects.astro)
-
-修改项目列表（第 4-33 行）：
-
-```javascript
-const projects = [
-  {
-    title: '你的项目名',
-    description: '项目描述...',
-    tags: ['技术栈1', '技术栈2'],
-    image: '🎨',  // 使用 emoji 或替换为真实图片
-    demo: 'https://demo-link.com',
-    github: 'https://github.com/...',
-  },
-  // ...
-];
-```
-
-### 4. 技能专长 (Skills.astro)
-
-修改技能列表（第 4-30 行）：
-
-```javascript
-const skillCategories = [
-  {
-    title: '前端开发',
-    skills: [
-      { name: '你的技能', level: 90 },  // level: 0-100
-    ],
-  },
-];
-```
-
-### 5. 联系方式 (Contact.astro)
-
-修改联系信息（第 4-20 行）：
-
-```javascript
-const contactInfo = [
-  {
-    icon: '📧',
-    label: '邮箱',
-    value: 'your.email@example.com',
-    href: 'mailto:your.email@example.com',
-  },
-];
-```
-
-### 6. 页脚 (Footer.astro)
-
-修改版权信息（第 5 行）：
-
-```javascript
-const currentYear = new Date().getFullYear();
-```
-
-修改页脚描述（第 31-33 行）。
 
 ---
 
-## 🖼️ 添加真实图片
+## 👤 修改关于页面
 
-目前使用 emoji 作为项目图片占位符。要添加真实图片：
+编辑 `src/pages/about.astro`：
 
-1. 将图片放入 `public/` 文件夹
-2. 在组件中引用：
-
-```astro
-<!-- Projects.astro -->
-<div class="project-image">
-  <img src="/project1.jpg" alt="项目名称" />
-</div>
-```
+- 修改博客介绍
+- 修改个人介绍
+- 修改联系方式
 
 ---
 
@@ -220,46 +290,25 @@ body {
 
 ---
 
-## 📄 添加新页面
-
-1. 在 `src/pages/` 创建新文件，例如 `about.astro`：
-
-```astro
----
-import Layout from '../layouts/Layout.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
----
-
-<Layout title="关于我">
-  <Header />
-  <main>
-    <!-- 页面内容 -->
-  </main>
-  <Footer />
-</Layout>
-```
-
-2. 更新导航链接（在 `Header.astro` 中）
-
----
-
 ## 🚀 部署更新
 
 修改完成后，提交并推送到 GitHub：
 
 ```bash
+# 进入项目目录
+cd bubbleyog
+
 # 添加所有修改
 git add .
 
-# 提交
+# 提交（写上描述本次修改的说明）
 git commit -m "更新网站内容"
 
-# 推送
+# 推送到 GitHub
 git push origin main
 ```
 
-GitHub Actions 会自动构建并部署更新。
+GitHub Actions 会自动构建并部署更新。等待 1-2 分钟后刷新网站查看效果。
 
 ---
 
@@ -271,8 +320,8 @@ GitHub Actions 会自动构建并部署更新。
 
 ```astro
 <Layout 
-  title="你的新标题" 
-  description="你的新描述"
+  title="Blog - 技术博客" 
+  description="记录学习物理、计算机、深度学习的心得与思考。"
 >
 ```
 
@@ -287,21 +336,65 @@ export default defineConfig({
 });
 ```
 
-### 3. 表单提交如何工作？
+### 3. 文章中的图片怎么用？
 
-目前表单只是演示，需要后端支持。建议使用：
-- [Formspree](https://formspree.io/) - 免费表单处理
-- [Netlify Forms](https://docs.netlify.com/forms/setup/)
-- [Google Forms](https://forms.google.com)
+1. 将图片放入 `public/` 文件夹，例如 `public/images/my-image.jpg`
+2. 在 Markdown 中引用：
 
-### 4. 如何添加 Google Analytics？
+```markdown
+![图片描述](/images/my-image.jpg)
+```
 
-在 `src/layouts/Layout.astro` 的 `<head>` 中添加跟踪代码。
+### 4. 如何添加代码高亮？
+
+代码块会自动高亮，只需指定语言：
+
+````markdown
+```python
+def hello():
+    print("Hello, World!")
+```
+````
+
+### 5. 文章可以嵌套子目录吗？
+
+目前不支持，所有文章都直接放在 `src/content/articles/` 目录下。
+
+### 6. 文章日期格式是什么？
+
+使用 `YYYY-MM-DD` 格式，例如 `2024-02-10`。
+
+### 7. 如何删除文章？
+
+1. 删除 `src/content/articles/` 下的 Markdown 文件
+2. 删除 `src/data/articles.js` 中对应的数据
+3. 提交推送
+
+---
+
+## 📝 Markdown 语法参考
+
+文章支持标准 Markdown 语法：
+
+| 语法 | 效果 |
+|------|------|
+| `# 标题` | 一级标题 |
+| `## 标题` | 二级标题 |
+| `**粗体**` | **粗体** |
+| `*斜体*` | *斜体* |
+| `` `代码` `` | `代码` |
+| `[链接](url)` | [链接](url) |
+| `![图片](url)` | 图片 |
+| `- 列表` | 无序列表 |
+| `1. 列表` | 有序列表 |
+| `> 引用` | 引用块 |
+| `\|表格\|` | 表格 |
 
 ---
 
 ## 📚 更多资源
 
 - [Astro 文档](https://docs.astro.build/)
+- [Markdown 指南](https://www.markdownguide.org/)
 - [CSS 变量指南](https://developer.mozilla.org/zh-CN/docs/Web/CSS/Using_CSS_custom_properties)
-- [GitHub Pages 文档](https://docs.github.com/zh/pages)git add .add .
+- [GitHub Pages 文档](https://docs.github.com/zh/pages)
