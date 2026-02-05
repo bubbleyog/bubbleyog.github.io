@@ -1,0 +1,231 @@
+---
+const projects = [
+  {
+    title: '电商平台',
+    description: '一个现代化的电商平台，具有响应式设计和流畅的用户体验。支持商品浏览、购物车、支付等功能。',
+    tags: ['React', 'Node.js', 'MongoDB'],
+    image: '🛒',
+    demo: '#',
+    github: '#',
+  },
+  {
+    title: '任务管理应用',
+    description: '高效的任务管理工具，支持拖拽排序、标签分类、团队协作等功能。界面简洁，操作便捷。',
+    tags: ['Vue.js', 'TypeScript', 'Firebase'],
+    image: '📋',
+    demo: '#',
+    github: '#',
+  },
+  {
+    title: '数据可视化仪表盘',
+    description: '实时数据监控仪表盘，支持多种图表类型和自定义布局。适合展示业务数据和运营指标。',
+    tags: ['React', 'D3.js', 'Python'],
+    image: '📊',
+    demo: '#',
+    github: '#',
+  },
+  {
+    title: '社交应用',
+    description: '移动端优先的社交平台，支持实时聊天、动态发布、点赞评论等功能。注重用户体验和性能优化。',
+    tags: ['React Native', 'GraphQL', 'AWS'],
+    image: '💬',
+    demo: '#',
+    github: '#',
+  },
+];
+---
+
+<section id="projects" class="projects">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">作品展示</span>
+      <h2 class="section-title">
+        精选 <span class="gradient-text">项目</span>
+      </h2>
+      <p class="section-description">
+        这里展示了我近期完成的一些项目，每一个都倾注了我的心血和创意。
+      </p>
+    </div>
+    
+    <div class="projects-grid">
+      {projects.map((project, index) => (
+        <article class="project-card" style={`animation-delay: ${index * 0.1}s`}>
+          <div class="project-image">
+            <span class="project-emoji">{project.image}</span>
+            <div class="project-overlay">
+              <div class="project-links">
+                <a href={project.demo} class="project-link" aria-label="查看演示">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/>
+                  </svg>
+                </a>
+                <a href={project.github} class="project-link" aria-label="GitHub">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="project-content">
+            <h3 class="project-title">{project.title}</h3>
+            <p class="project-description">{project.description}</p>
+            <div class="project-tags">
+              {project.tags.map(tag => (
+                <span class="tag">{tag}</span>
+              ))}
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+    
+    <div class="projects-more">
+      <a href="#" class="btn btn-secondary">
+        <span>查看更多项目</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .section-header {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto 3rem;
+  }
+  
+  .section-tag {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-full);
+    font-size: 0.875rem;
+    color: var(--accent-primary);
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+  
+  .section-title {
+    margin-bottom: 1rem;
+  }
+  
+  .section-description {
+    font-size: 1.1rem;
+  }
+  
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+  }
+  
+  .project-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+  
+  .project-card:hover {
+    border-color: var(--accent-primary);
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-glow);
+  }
+  
+  .project-image {
+    height: 180px;
+    background: var(--bg-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .project-emoji {
+    font-size: 4rem;
+    transition: transform 0.3s ease;
+  }
+  
+  .project-card:hover .project-emoji {
+    transform: scale(1.1);
+  }
+  
+  .project-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .project-card:hover .project-overlay {
+    opacity: 1;
+  }
+  
+  .project-links {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .project-link {
+    width: 44px;
+    height: 44px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--bg-primary);
+    transition: all 0.3s ease;
+  }
+  
+  .project-link:hover {
+    transform: scale(1.1);
+    color: var(--bg-primary);
+  }
+  
+  .project-content {
+    padding: 1.5rem;
+  }
+  
+  .project-title {
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .project-description {
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .projects-more {
+    text-align: center;
+  }
+  
+  @media (max-width: 768px) {
+    .projects-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
