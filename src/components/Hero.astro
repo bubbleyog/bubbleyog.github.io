@@ -10,18 +10,18 @@ const latestArticles = getLatestArticles(3);
     <div class="gradient-orb orb-1"></div>
     <div class="gradient-orb orb-2"></div>
   </div>
-  
+
   <div class="container">
     <div class="hero-content">
       <h1 class="hero-title animate-fade-in">
-        探索知识的<br />
-        <span class="gradient-text">无限可能</span>
+        量子态的犹格Yog
       </h1>
-      
+
       <p class="hero-subtitle animate-fade-in" style="animation-delay: 0.1s">
-        记录学习物理、计算机、深度学习的心得与思考
+        伟大的犹格索托斯万千化身之一
+        关于物理、计算机和深度学习
       </p>
-      
+
       <div class="hero-categories animate-fade-in" style="animation-delay: 0.2s">
         {categories.map(cat => (
           <a href={`/category/${cat.id}`} class="category-badge" style={`--category-color: ${cat.color}`}>
@@ -43,21 +43,21 @@ const latestArticles = getLatestArticles(3);
     padding-top: 70px;
     overflow: hidden;
   }
-  
+
   .hero-bg {
     position: absolute;
     inset: 0;
     overflow: hidden;
     pointer-events: none;
   }
-  
+
   .gradient-orb {
     position: absolute;
     border-radius: 50%;
     filter: blur(100px);
     opacity: 0.4;
   }
-  
+
   .orb-1 {
     width: 500px;
     height: 500px;
@@ -66,7 +66,7 @@ const latestArticles = getLatestArticles(3);
     right: -100px;
     animation: float 8s ease-in-out infinite;
   }
-  
+
   .orb-2 {
     width: 400px;
     height: 400px;
@@ -75,7 +75,7 @@ const latestArticles = getLatestArticles(3);
     left: -100px;
     animation: float 10s ease-in-out infinite reverse;
   }
-  
+
   .hero-content {
     position: relative;
     z-index: 1;
@@ -84,25 +84,25 @@ const latestArticles = getLatestArticles(3);
     margin: 0 auto;
     padding: 3rem 0;
   }
-  
+
   .hero-title {
     margin-bottom: 1rem;
     line-height: 1.2;
   }
-  
+
   .hero-subtitle {
     font-size: 1.25rem;
     color: var(--text-secondary);
     margin-bottom: 2rem;
   }
-  
+
   .hero-categories {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 1rem;
   }
-  
+
   .category-badge {
     display: flex;
     align-items: center;
@@ -115,36 +115,36 @@ const latestArticles = getLatestArticles(3);
     font-weight: 500;
     transition: all 0.3s ease;
   }
-  
+
   .category-badge:hover {
     border-color: var(--category-color);
     color: var(--text-primary);
     transform: translateY(-2px);
     box-shadow: 0 0 20px color-mix(in srgb, var(--category-color) 30%, transparent);
   }
-  
+
   .category-icon {
     font-size: 1.25rem;
   }
-  
+
   @keyframes float {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-20px); }
   }
-  
+
   @media (max-width: 768px) {
     .hero {
       min-height: 50vh;
     }
-    
+
     .hero-title {
       font-size: 2rem;
     }
-    
+
     .hero-subtitle {
       font-size: 1rem;
     }
-    
+
     .category-badge {
       padding: 0.5rem 1rem;
       font-size: 0.9rem;
