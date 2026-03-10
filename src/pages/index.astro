@@ -2,8 +2,9 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Hero from '../components/Hero.astro';
-import CategorySection from '../components/CategorySection.astro';
+import ResearchSection from '../components/ResearchSection.astro';
 import ArticleList from '../components/ArticleList.astro';
+import CategorySection from '../components/CategorySection.astro';
 import Footer from '../components/Footer.astro';
 ---
 
@@ -14,6 +15,7 @@ import Footer from '../components/Footer.astro';
   <Header />
   <main>
     <Hero />
+    <ResearchSection />
     <ArticleList limit={3} />
     <CategorySection />
   </main>

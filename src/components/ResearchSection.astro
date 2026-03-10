@@ -1,0 +1,152 @@
+---
+// 研究方向数据
+const researchAreas = [
+  {
+    id: 'free-electron',
+    title: '自由电子量子光学',
+    icon: '⚛️',
+    color: '#6366f1',
+    description: '通过光与电子的相互作用对电子进行量子调制，揭示光与自由电子的相互作用机制，解析光与自由电子间信息传递的过程。'
+  },
+  {
+    id: 'spatiotemporal',
+    title: '时空光学调制',
+    icon: '⏱️',
+    color: '#8b5cf6',
+    description: '时空光子晶体调控实验，开发基于FPGA的高性能实验器件，探寻其中的非线性动力学过程及其应用。'
+  },
+  {
+    id: 'ai4s',
+    title: 'AI4S及可解释性研究',
+    icon: '🤖',
+    color: '#ec4899',
+    description: '物理神经网络的设计与实验，适用于光与物质相互作用及非线性光学的AI4S模型开发，以及AI模型的物理学可解释性研究。'
+  }
+];
+---
+
+<section class="research-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">
+        研究 <span class="gradient-text">方向</span>
+      </h2>
+      <p class="section-description">
+        探索量子光学、时空光学与人工智能的交叉前沿
+      </p>
+    </div>
+    
+    <div class="research-grid">
+      {researchAreas.map(area => (
+        <article class="research-card">
+          <div class="card-icon" style={`background: ${area.color}20; color: ${area.color}`}>
+            {area.icon}
+          </div>
+          <h3 class="card-title">{area.title}</h3>
+          <p class="card-description">{area.description}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .research-section {
+    padding: 4rem 0;
+  }
+  
+  .section-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  
+  .section-title {
+    font-size: 2.25rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .section-description {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+  }
+  
+  .research-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .research-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .research-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #6366f1, #8b5cf6, #ec4899);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+  }
+  
+  .research-card:hover {
+    border-color: var(--accent-primary);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-glow);
+  }
+  
+  .research-card:hover::before {
+    transform: scaleX(1);
+  }
+  
+  .card-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    transition: transform 0.3s ease;
+  }
+  
+  .research-card:hover .card-icon {
+    transform: scale(1.1) rotate(-5deg);
+  }
+  
+  .card-title {
+    font-size: 1.35rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-primary);
+  }
+  
+  .card-description {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+  
+  @media (max-width: 768px) {
+    .research-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .section-title {
+      font-size: 1.75rem;
+    }
+    
+    .research-card {
+      padding: 1.5rem;
+    }
+  }
+</style>
