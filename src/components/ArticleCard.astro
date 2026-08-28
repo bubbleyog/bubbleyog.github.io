@@ -1,5 +1,7 @@
 ---
-import { getCategoryById } from '../data/articles.js';
+import { getCategoryById, getCategoryName } from '../data/articles.js';
+import { t, type Locale } from '../i18n';
+import { getLangFromUrl, formatDate } from '../utils/locale';
 
 export interface Props {
   article: {
@@ -14,24 +16,17 @@ export interface Props {
 
 const { article } = Astro.props;
 const category = getCategoryById(article.category);
-
-function formatDate(dateStr: string) {
-  const date = new Date(dateStr);
-  return date.toLocaleDateString('zh-CN', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-}
+const lang: Locale = getLangFromUrl(Astro.url);
+const prefix = lang === 'en' ? '/en' : '';
 ---
 
 <article class="article-card">
-  <a href={`/article/${article.id}`} class="article-link">
+  <a href={`${prefix}/article/${article.id}`} class="article-link">
     <div class="article-header">
       <span class="category-tag" style={`background: ${category.color}20; color: ${category.color}`}>
-        {category.icon} {category.name}
+        {category.icon} {getCategoryName(category, lang)}
       </span>
-      <time class="article-date">{formatDate(article.date)}</time>
+      <time class="article-date">{formatDate(article.date, lang)}</time>
     </div>
     
     <h2 class="article-title">{article.title}</h2>
@@ -44,7 +39,7 @@ function formatDate(dateStr: string) {
         ))}
       </div>
       <span class="read-more">
-        阅读更多
+        {t(lang, 'common.readMore')}
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M5 12h14M12 5l7 7-7 7"/>
         </svg>

@@ -1,35 +1,40 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Header from '../components/Header.astro';
-import ArticleCard from '../components/ArticleCard.astro';
-import Footer from '../components/Footer.astro';
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import Footer from '../../components/Footer.astro';
+import { t } from '../../i18n';
 
-// 直接从 Markdown 文件读取所有文章（过滤掉英文版本 .en.md）
-const markdownFiles = (await Astro.glob('../content/articles/*.md')).filter(
-  (f) => !f.file?.endsWith('.en.md'),
-);
+// 直接从 Markdown 文件读取所有英文文章（import.meta.glob 空结果不抛错）
+const modules = import.meta.glob('../../content/articles/*.en.md');
 
-const articles = markdownFiles
-  .map((file) => {
-    const pathParts = file.file?.split('/') || [];
+const rawEntries = await Promise.all(
+  Object.entries(modules).map(async ([file, loader]) => {
+    const entry = await loader();
+    const pathParts = file.split('/') || [];
     const filename = pathParts[pathParts.length - 1] || '';
-    const id = filename.replace('.md', '');
-    
+    const id = filename.replace(/\.en\.md$/, '');
+    const frontmatter = entry.frontmatter || {};
     return {
       id,
-      title: file.frontmatter?.title || '无标题',
-      category: file.frontmatter?.category || 'misc',
-      date: file.frontmatter?.date || new Date().toISOString().split('T')[0],
-      description: file.frontmatter?.description || '',
-      tags: file.frontmatter?.tags || [],
+      title: frontmatter.title || 'Untitled',
+      category: frontmatter.category || 'misc',
+      date: frontmatter.date || new Date().toISOString().split('T')[0],
+      description: frontmatter.description || '',
+      tags: frontmatter.tags || [],
     };
-  })
-  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  }),
+);
+
+const articles = rawEntries.sort(
+  (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+);
 ---
 
 <Layout 
-  title="全部文章 - Blog"
-  description="浏览所有文章"
+  title="All Articles - BubbleYog"
+  description="Browse all articles"
+  lang="en"
 >
   <Header />
   
@@ -38,9 +43,9 @@ const articles = markdownFiles
     <section class="page-header">
       <div class="container">
         <div class="page-hero">
-          <h1 class="page-title">全部 <span class="gradient-text">文章</span></h1>
-          <p class="page-description">探索技术见解、学习心得和思考感悟</p>
-          <span class="article-count">{articles.length} 篇文章</span>
+          <h1 class="page-title">{t('en', 'articles.pageTitlePrefix')} <span class="gradient-text">{t('en', 'articles.titleKeyword')}</span></h1>
+          <p class="page-description">{t('en', 'articles.pageDescription')}</p>
+          <span class="article-count">{articles.length} {articles.length === 1 ? 'article' : 'articles'}</span>
         </div>
       </div>
     </section>
@@ -56,16 +61,16 @@ const articles = markdownFiles
           </div>
         ) : (
           <div class="empty-state">
-            <p>暂无文章，敬请期待...</p>
+            <p>{t('en', 'common.noArticlesGeneral')}</p>
           </div>
         )}
         
         <div class="back-link">
-          <a href="/" class="btn btn-secondary">
+          <a href="/en" class="btn btn-secondary">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M19 12H5M12 19l-7-7 7-7"/>
             </svg>
-            <span>返回首页</span>
+            <span>{t('en', 'common.backHome')}</span>
           </a>
         </div>
       </div>

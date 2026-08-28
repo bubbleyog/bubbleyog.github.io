@@ -1,0 +1,57 @@
+{
+  "siteName": "Blog",
+  "nav": {
+    "home": "首页",
+    "about": "关于"
+  },
+  "common": {
+    "readMore": "阅读更多",
+    "viewAll": "查看全部文章",
+    "backHome": "返回首页",
+    "articlesCount": "{count} 篇文章",
+    "noArticles": "该分类下暂无文章，敬请期待...",
+    "noArticlesGeneral": "暂无文章，敬请期待...",
+    "moreCategoryArticles": "更多{category}文章",
+    "contentLoadFailed": "文章内容加载失败",
+    "languageToggle": "English"
+  },
+  "hero": {
+    "title": "量子态的犹格Yog",
+    "subtitleLine1": "伟大的犹格索托斯万千化身之一",
+    "subtitleLine2": "关于物理、计算机和深度学习"
+  },
+  "research": {
+    "titleKeyword": "方向",
+    "titlePrefix": "研究",
+    "description": "研究量子计算与量子算法，探索物理与人工智能的交叉前沿",
+    "areas": [
+      { "title": "硅基量子计算", "description": "利用硅基半导体量子点构建长相干、高保真度的量子计算器件，并利用FPGA等设备搭建高质量控制系统使之能够可靠运行。" },
+      { "title": "量子算法与量子人工智能", "description": "结合量子计算器件设计量子算法，并在此基础上探索实现量子人工智能的可能性。" },
+      { "title": "AI4S及可解释性研究", "description": "物理神经网络的设计与实验，适用于物理学的AI4S模型开发，以及AI模型的物理学可解释性研究。" }
+    ]
+  },
+  "articles": {
+    "titleKeyword": "文章",
+    "titlePrefix": "最新",
+    "description": "分享技术见解、学习心得和思考感悟",
+    "pageTitlePrefix": "全部",
+    "pageDescription": "探索技术见解、学习心得和思考感悟"
+  },
+  "categories": {
+    "titleKeyword": "分类",
+    "titlePrefix": "文章",
+    "description": "按主题浏览不同领域的文章"
+  },
+  "footer": {
+    "description": "关于物理、计算机和深度学习。",
+    "categories": "分类",
+    "follow": "关注我"
+  },
+  "about": {
+    "pageTitle": "本站",
+    "pageTitlePrefix": "关于",
+    "aboutMe": "关于我",
+    "contact": "联系方式",
+    "contactIntro": "如果你对我的文章有任何问题或建议，欢迎通过以下方式联系我："
+  }
+}

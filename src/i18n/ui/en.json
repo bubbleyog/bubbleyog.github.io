@@ -1,0 +1,57 @@
+{
+  "siteName": "BubbleYog",
+  "nav": {
+    "home": "Home",
+    "about": "About"
+  },
+  "common": {
+    "readMore": "Read more",
+    "viewAll": "View all articles",
+    "backHome": "Back home",
+    "articlesCount": "{count} articles",
+    "noArticles": "No articles in this category yet. Stay tuned...",
+    "noArticlesGeneral": "No articles yet, stay tuned...",
+    "moreCategoryArticles": "More {category} articles",
+    "contentLoadFailed": "Failed to load article content",
+    "languageToggle": "中文"
+  },
+  "hero": {
+    "title": "BubbleYog",
+    "subtitleLine1": "One of the myriad avatars of the great Yog-Sothoth",
+    "subtitleLine2": "On physics, computing, and deep learning"
+  },
+  "research": {
+    "titleKeyword": "Directions",
+    "titlePrefix": "Research",
+    "description": "Researching quantum computing and quantum algorithms, exploring the interdisciplinary frontier of physics and AI",
+    "areas": [
+      { "title": "Silicon Quantum Computing", "description": "Building long-coherence, high-fidelity quantum computing devices using silicon semiconductor quantum dots, and leveraging tools such as FPGA to construct high-quality control systems for reliable operation." },
+      { "title": "Quantum Algorithms & Quantum AI", "description": "Designing quantum algorithms in concert with quantum computing devices, and exploring the possibility of realizing quantum artificial intelligence on this basis." },
+      { "title": "AI4S & Interpretability", "description": "Design and experimentation of physical neural networks, development of AI4S models for physics, and research on the physical interpretability of AI models." }
+    ]
+  },
+  "articles": {
+    "titleKeyword": "Articles",
+    "titlePrefix": "Latest",
+    "description": "Sharing technical insights, learning notes, and reflections",
+    "pageTitlePrefix": "All",
+    "pageDescription": "Explore technical insights, learning notes, and reflections"
+  },
+  "categories": {
+    "titleKeyword": "Categories",
+    "titlePrefix": "Browse",
+    "description": "Browse articles by topic"
+  },
+  "footer": {
+    "description": "About physics, computing, and deep learning.",
+    "categories": "Categories",
+    "follow": "Follow me"
+  },
+  "about": {
+    "pageTitle": "This Site",
+    "pageTitlePrefix": "About",
+    "aboutMe": "About Me",
+    "contact": "Contact",
+    "contactIntro": "If you have any questions or suggestions about my articles, feel free to reach out:"
+  }
+}

@@ -1,9 +1,10 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-import Header from '../../components/Header.astro';
-import ArticleCard from '../../components/ArticleCard.astro';
-import Footer from '../../components/Footer.astro';
-import { getAllCategories, getCategoryById } from '../../data/articles.js';
+import Layout from '../../../layouts/Layout.astro';
+import Header from '../../../components/Header.astro';
+import ArticleCard from '../../../components/ArticleCard.astro';
+import Footer from '../../../components/Footer.astro';
+import { getAllCategories, getCategoryById, getCategoryName, getCategoryDescription } from '../../../data/articles.js';
+import { t } from '../../../i18n';
 
 // 生成所有分类的静态路径
 export function getStaticPaths() {
@@ -16,43 +17,36 @@ export function getStaticPaths() {
 const { id } = Astro.params;
 const category = getCategoryById(id);
 
-// 直接从 Markdown 文件读取该分类的文章（过滤掉英文版本 .en.md）
-const markdownFiles = (await Astro.glob('../../content/articles/*.md')).filter(
-  (f) => !f.file?.endsWith('.en.md'),
-);
+// 直接从 Markdown 文件读取该分类的英文文章（import.meta.glob 空结果不抛错）
+const modules = import.meta.glob('../../../content/articles/*.en.md');
 
-const articles = markdownFiles
-  .map((file) => {
-    const pathParts = file.file?.split('/') || [];
+const rawArticles = await Promise.all(
+  Object.entries(modules).map(async ([file, loader]) => {
+    const entry = await loader();
+    const pathParts = file.split('/') || [];
     const filename = pathParts[pathParts.length - 1] || '';
-    const articleId = filename.replace('.md', '');
-    
+    const articleId = filename.replace(/\.en\.md$/, '');
+    const frontmatter = entry.frontmatter || {};
     return {
       id: articleId,
-      title: file.frontmatter?.title || '无标题',
-      category: file.frontmatter?.category || 'misc',
-      date: file.frontmatter?.date || new Date().toISOString().split('T')[0],
-      description: file.frontmatter?.description || '',
-      tags: file.frontmatter?.tags || [],
+      title: frontmatter.title || 'Untitled',
+      category: frontmatter.category || 'misc',
+      date: frontmatter.date || new Date().toISOString().split('T')[0],
+      description: frontmatter.description || '',
+      tags: frontmatter.tags || [],
     };
-  })
+  }),
+);
+
+const articles = rawArticles
   .filter(article => article.category === id)
   .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-
-// 格式化日期
-function formatDate(dateStr: string) {
-  const date = new Date(dateStr);
-  return date.toLocaleDateString('zh-CN', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-}
 ---
 
 <Layout 
-  title={`${category.name} - Blog`}
-  description={category.description}
+  title={`${getCategoryName(category, 'en')} - BubbleYog`}
+  description={getCategoryDescription(category, 'en')}
+  lang="en"
 >
   <Header />
   
@@ -62,9 +56,9 @@ function formatDate(dateStr: string) {
       <div class="container">
         <div class="category-hero">
           <span class="category-icon">{category.icon}</span>
-          <h1 class="category-title">{category.name}</h1>
-          <p class="category-description">{category.description}</p>
-          <span class="article-count">{articles.length} 篇文章</span>
+          <h1 class="category-title">{getCategoryName(category, 'en')}</h1>
+          <p class="category-description">{getCategoryDescription(category, 'en')}</p>
+          <span class="article-count">{articles.length} {articles.length === 1 ? 'article' : 'articles'}</span>
         </div>
       </div>
     </section>
@@ -80,16 +74,16 @@ function formatDate(dateStr: string) {
           </div>
         ) : (
           <div class="empty-state">
-            <p>该分类下暂无文章，敬请期待...</p>
+            <p>{t('en', 'common.noArticles')}</p>
           </div>
         )}
         
         <div class="back-link">
-          <a href="/" class="btn btn-secondary">
+          <a href="/en" class="btn btn-secondary">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M19 12H5M12 19l-7-7 7-7"/>
             </svg>
-            <span>返回首页</span>
+            <span>{t('en', 'common.backHome')}</span>
           </a>
         </div>
       </div>

@@ -1,8 +1,11 @@
 ---
-import { getAllCategories, getLatestArticles } from '../data/articles.js';
+import { getAllCategories, getCategoryName } from '../data/articles.js';
+import { t, type Locale } from '../i18n';
+import { getLangFromUrl } from '../utils/locale';
 
 const categories = getAllCategories();
-const latestArticles = getLatestArticles(3);
+const lang: Locale = getLangFromUrl(Astro.url);
+const prefix = lang === 'en' ? '/en' : '';
 ---
 
 <section class="hero">
@@ -14,19 +17,19 @@ const latestArticles = getLatestArticles(3);
   <div class="container">
     <div class="hero-content">
       <h1 class="hero-title animate-fade-in">
-        量子态的犹格Yog
+        {t(lang, 'hero.title')}
       </h1>
 
       <p class="hero-subtitle animate-fade-in" style="animation-delay: 0.1s">
-        伟大的犹格索托斯万千化身之一<br>
-        关于物理、计算机和深度学习
+        {t(lang, 'hero.subtitleLine1')}<br>
+        {t(lang, 'hero.subtitleLine2')}
       </p>
 
       <div class="hero-categories animate-fade-in" style="animation-delay: 0.2s">
         {categories.map(cat => (
-          <a href={`/category/${cat.id}`} class="category-badge" style={`--category-color: ${cat.color}`}>
+          <a href={`${prefix}/category/${cat.id}`} class="category-badge" style={`--category-color: ${cat.color}`}>
             <span class="category-icon">{cat.icon}</span>
-            <span class="category-name">{cat.name}</span>
+            <span class="category-name">{getCategoryName(cat, lang)}</span>
           </a>
         ))}
       </div>

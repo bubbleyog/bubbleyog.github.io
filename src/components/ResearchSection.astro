@@ -1,41 +1,33 @@
 ---
-// 研究方向数据
-const researchAreas = [
-    {
-        id: "silicon-quantum",
-        title: "硅基量子计算",
-        icon: "⚛️",
-        color: "#6366f1",
-        description:
-            "利用硅基半导体量子点构建长相干、高保真度的量子计算器件，并利用FPGA等设备搭建高质量控制系统使之能够可靠运行。",
-    },
-    {
-        id: "quantum-algorithm",
-        title: "量子算法与量子人工智能",
-        icon: "⏱️",
-        color: "#8b5cf6",
-        description:
-            "结合量子计算器件设计量子算法，并在此基础上探索实现量子人工智能的可能性。",
-    },
-    {
-        id: "ai4s",
-        title: "AI4S及可解释性研究",
-        icon: "🤖",
-        color: "#ec4899",
-        description:
-            "物理神经网络的设计与实验，适用于物理学的AI4S模型开发，以及AI模型的物理学可解释性研究。",
-    },
+import { t, getUiDictionary, type Locale } from '../i18n';
+import { getLangFromUrl } from '../utils/locale';
+
+const lang: Locale = getLangFromUrl(Astro.url);
+const ui = getUiDictionary(lang);
+
+// 研究方向数据（从字典读取，中英双语），图标/颜色按固定顺序映射
+const areaMeta = [
+  { icon: '⚛️', color: '#6366f1' },
+  { icon: '⏱️', color: '#8b5cf6' },
+  { icon: '🤖', color: '#ec4899' },
 ];
+
+const researchAreas = ui.research.areas.map((area, i) => ({
+  title: area.title,
+  icon: areaMeta[i]?.icon || '🔬',
+  color: areaMeta[i]?.color || '#6366f1',
+  description: area.description,
+}));
 ---
 
 <section class="research-section">
     <div class="container">
         <div class="section-header">
             <h2 class="section-title">
-                研究 <span class="gradient-text">方向</span>
+                {t(lang, 'research.titlePrefix')} <span class="gradient-text">{t(lang, 'research.titleKeyword')}</span>
             </h2>
             <p class="section-description">
-                研究量子计算与量子算法，探索物理与人工智能的交叉前沿
+                {t(lang, 'research.description')}
             </p>
         </div>
 

@@ -1,45 +1,54 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-import Header from '../../components/Header.astro';
-import Footer from '../../components/Footer.astro';
-import { getCategoryById } from '../../data/articles.js';
+import Layout from '../../../layouts/Layout.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+import { getCategoryById, getCategoryName } from '../../../data/articles.js';
+import { t } from '../../../i18n';
 
-// 生成所有文章的静态路径（过滤掉英文版本 .en.md）
+// 生成所有英文文章的静态路径
 export async function getStaticPaths() {
-  const articles = await Astro.glob('../../content/articles/*.md');
-  const zhArticles = articles.filter((a) => !a.file?.endsWith('.en.md'));
+  const modules = import.meta.glob('../../../content/articles/*.en.md');
   
-  return zhArticles.map((article) => {
-    const pathParts = article.file?.split('/') || [];
+  const entries = Object.entries(modules);
+  if (entries.length === 0) return [];
+
+  return entries.map(([file]) => {
+    const pathParts = file.split('/') || [];
     const filename = pathParts[pathParts.length - 1] || '';
-    const id = filename.replace('.md', '');
+    const id = filename.replace('.en.md', '');
     
     return {
       params: { id },
-      props: {
-        article: {
-          id,
-          title: article.frontmatter?.title || '无标题',
-          category: article.frontmatter?.category || 'misc',
-          date: article.frontmatter?.date || new Date().toISOString().split('T')[0],
-          description: article.frontmatter?.description || '',
-          tags: article.frontmatter?.tags || [],
-        },
-        Content: article.default,
-      },
     };
   });
 }
 
 // 获取当前文章
 const { id } = Astro.params;
-const { article, Content } = Astro.props;
+
+const modules = import.meta.glob('../../../content/articles/*.en.md');
+const matchedFile = Object.keys(modules).find((f) => f.endsWith(`/${id}.en.md`));
+const loader = matchedFile ? modules[matchedFile] : null;
+const entry = loader ? (await loader()) : null;
+
+const frontmatter = (entry && entry.frontmatter) || {};
+const Content = entry ? entry.default : null;
+
+const article = {
+  id,
+  title: frontmatter.title || 'Untitled',
+  category: frontmatter.category || 'misc',
+  date: frontmatter.date || new Date().toISOString().split('T')[0],
+  description: frontmatter.description || '',
+  tags: frontmatter.tags || [],
+};
+
 const category = getCategoryById(article.category);
 
 // 格式化日期
 function formatDate(dateStr: string) {
   const date = new Date(dateStr);
-  return date.toLocaleDateString('zh-CN', {
+  return date.toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -48,8 +57,9 @@ function formatDate(dateStr: string) {
 ---
 
 <Layout 
-  title={`${article.title} - Blog`}
+  title={`${article.title} - BubbleYog`}
   description={article.description}
+  lang="en"
 >
   <Header />
   
@@ -58,9 +68,9 @@ function formatDate(dateStr: string) {
       <!-- 文章头部 -->
       <header class="article-header" style={`--category-color: ${category.color}`}>
         <div class="article-meta">
-          <a href={`/category/${category.id}`} class="category-link">
+          <a href={`/en/category/${category.id}`} class="category-link">
             <span class="category-icon">{category.icon}</span>
-            <span>{category.name}</span>
+            <span>{getCategoryName(category, 'en')}</span>
           </a>
           <time class="article-date">{formatDate(article.date)}</time>
         </div>
@@ -77,20 +87,20 @@ function formatDate(dateStr: string) {
       
       <!-- 文章内容 -->
       <article class="article-content">
-        {Content ? <Content /> : <p>文章内容加载失败</p>}
+        {Content ? <Content /> : <p>{t('en', 'common.contentLoadFailed')}</p>}
       </article>
       
       <!-- 文章底部 -->
       <footer class="article-footer">
         <div class="article-nav">
-          <a href="/" class="btn btn-secondary">
+          <a href="/en" class="btn btn-secondary">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M19 12H5M12 19l-7-7 7-7"/>
             </svg>
-            <span>返回首页</span>
+            <span>{t('en', 'common.backHome')}</span>
           </a>
-          <a href={`/category/${category.id}`} class="btn btn-primary">
-            <span>更多{category.name}文章</span>
+          <a href={`/en/category/${category.id}`} class="btn btn-primary">
+            <span>More {getCategoryName(category, 'en')} articles</span>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M5 12h14M12 5l7 7-7 7"/>
             </svg>

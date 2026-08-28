@@ -1,14 +1,23 @@
 ---
+import type { Locale } from '../i18n';
+
 export interface Props {
   title: string;
   description?: string;
+  lang?: Locale;
 }
 
-const { title, description = 'Welcome to my personal website' } = Astro.props;
+const {
+  title,
+  description = 'Welcome to my personal website',
+  lang = 'zh',
+} = Astro.props;
+
+const htmlLang = lang === 'en' ? 'en' : 'zh-CN';
 ---
 
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang={htmlLang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />

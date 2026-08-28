@@ -1,38 +1,54 @@
 ---
-import { getAllCategories } from '../data/articles.js';
+import { getAllCategories, getCategoryName } from '../data/articles.js';
+import { t, type Locale } from '../i18n';
+import { getLangFromUrl } from '../utils/locale';
 
 const categories = getAllCategories();
+const lang: Locale = getLangFromUrl(Astro.url);
+
+// 计算另一语言的 URL
+const otherLang = lang === 'zh' ? 'en' : 'zh';
+// 去掉 /en 前缀得到页面基础路径
+const basePath = lang === 'en'
+  ? Astro.url.pathname.replace(/^\/en/, '') || '/'
+  : Astro.url.pathname;
+const otherUrl = otherLang === 'en' ? `/en${basePath}` : basePath;
+const toggleLabel = t(lang, 'common.languageToggle');
+const siteName = t(lang, 'siteName');
 ---
 
 <header class="header">
   <div class="container header-container">
     <a href="/" class="logo">
-      <span class="gradient-text">Blog</span>
+      <span class="gradient-text">{siteName}</span>
     </a>
     
     <nav class="nav">
       <ul class="nav-list">
         <li class="nav-item">
-          <a href="/" class="nav-link">首页</a>
+          <a href={lang === 'en' ? '/en' : '/'} class="nav-link">{t(lang, 'nav.home')}</a>
         </li>
         {categories.map(category => (
           <li class="nav-item">
-            <a href={`/category/${category.id}`} class="nav-link">
-              {category.name}
+            <a href={`${lang === 'en' ? '/en' : ''}/category/${category.id}`} class="nav-link">
+              {getCategoryName(category, lang)}
             </a>
           </li>
         ))}
         <li class="nav-item">
-          <a href="/about" class="nav-link">关于</a>
+          <a href={lang === 'en' ? '/en/about' : '/about'} class="nav-link">{t(lang, 'nav.about')}</a>
         </li>
       </ul>
     </nav>
-    
-    <button class="menu-toggle" aria-label="切换菜单">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
+
+    <div class="header-actions">
+      <a href={otherUrl} class="lang-toggle" aria-label="Switch language">{toggleLabel}</a>
+      <button class="menu-toggle" aria-label="切换菜单">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
   </div>
 </header>
 
@@ -77,6 +93,7 @@ const categories = getAllCategories();
     display: flex;
     list-style: none;
     gap: 0.5rem;
+    align-items: center;
   }
   
   .nav-link {
@@ -91,6 +108,29 @@ const categories = getAllCategories();
   .nav-link:hover {
     color: var(--text-primary);
     background: var(--bg-card);
+  }
+  
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  
+  .lang-toggle {
+    color: var(--text-secondary);
+    font-weight: 500;
+    font-size: 0.9rem;
+    padding: 0.4rem 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    transition: all 0.3s ease;
+    white-space: nowrap;
+  }
+  
+  .lang-toggle:hover {
+    color: var(--text-primary);
+    background: var(--bg-card);
+    border-color: var(--accent-primary);
   }
   
   .menu-toggle {
@@ -146,6 +186,7 @@ const categories = getAllCategories();
     .nav-list {
       flex-direction: column;
       gap: 0.5rem;
+      align-items: stretch;
     }
     
     .nav-link {

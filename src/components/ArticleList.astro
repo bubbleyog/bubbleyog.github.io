@@ -1,5 +1,7 @@
 ---
 import ArticleCard from './ArticleCard.astro';
+import { t, type Locale } from '../i18n';
+import { getLangFromUrl } from '../utils/locale';
 
 export interface Props {
   limit?: number;
@@ -7,25 +9,39 @@ export interface Props {
 }
 
 const { limit = 6, showHeader = true } = Astro.props;
+const lang: Locale = getLangFromUrl(Astro.url);
+const prefix = lang === 'en' ? '/en' : '';
 
-// 直接从 Markdown 文件读取文章
-const markdownFiles = await Astro.glob('../content/articles/*.md');
+// 直接从 Markdown 文件读取文章（import.meta.glob 空结果不抛错；按语言过滤）
+const enModules = import.meta.glob('../content/articles/*.en.md');
+const allModules = import.meta.glob('../content/articles/*.md');
 
-const articles = markdownFiles
-  .map((file) => {
-    const pathParts = file.file?.split('/') || [];
-    const filename = pathParts[pathParts.length - 1] || '';
-    const id = filename.replace('.md', '');
-    
-    return {
-      id,
-      title: file.frontmatter?.title || '无标题',
-      category: file.frontmatter?.category || 'misc',
-      date: file.frontmatter?.date || new Date().toISOString().split('T')[0],
-      description: file.frontmatter?.description || '',
-      tags: file.frontmatter?.tags || [],
-    };
-  })
+const selectedModules =
+  lang === 'en'
+    ? enModules
+    : Object.fromEntries(
+        Object.entries(allModules).filter(([f]) => !f.endsWith('.en.md')),
+      );
+
+const articles = (
+  await Promise.all(
+    Object.entries(selectedModules).map(async ([file, loader]) => {
+      const entry = await loader();
+      const pathParts = file.split('/') || [];
+      const filename = pathParts[pathParts.length - 1] || '';
+      const id = filename.replace(/\.en\.md$|\.md$/, '');
+      const frontmatter = entry.frontmatter || {};
+      return {
+        id,
+        title: frontmatter.title || (lang === 'en' ? 'Untitled' : '无标题'),
+        category: frontmatter.category || 'misc',
+        date: frontmatter.date || new Date().toISOString().split('T')[0],
+        description: frontmatter.description || '',
+        tags: frontmatter.tags || [],
+      };
+    }),
+  )
+)
   .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
   .slice(0, limit);
 ---
@@ -35,10 +51,10 @@ const articles = markdownFiles
     {showHeader && (
       <div class="section-header">
         <h2 class="section-title">
-          最新 <span class="gradient-text">文章</span>
+          {t(lang, 'articles.titlePrefix')} <span class="gradient-text">{t(lang, 'articles.titleKeyword')}</span>
         </h2>
         <p class="section-description">
-          分享技术见解、学习心得和思考感悟
+          {t(lang, 'articles.description')}
         </p>
       </div>
     )}
@@ -51,8 +67,8 @@ const articles = markdownFiles
     
     {showHeader && (
       <div class="view-all">
-        <a href="/articles" class="btn btn-secondary">
-          <span>查看全部文章</span>
+        <a href={`${prefix}/articles`} class="btn btn-secondary">
+          <span>{t(lang, 'common.viewAll')}</span>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M5 12h14M12 5l7 7-7 7"/>
           </svg>
