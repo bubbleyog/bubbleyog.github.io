@@ -2,6 +2,7 @@
   "siteName": "BubbleYog",
   "nav": {
     "home": "Home",
+    "downloads": "Downloads",
     "about": "About"
   },
   "common": {
@@ -53,5 +54,18 @@
     "aboutMe": "About Me",
     "contact": "Contact",
     "contactIntro": "If you have any questions or suggestions about my articles, feel free to reach out:"
+  },
+  "downloads": {
+    "pageTitle": "Downloads",
+    "pageTitleKeyword": "Center",
+    "pageDescription": "Download physics lecture notes and related materials",
+    "viewGroup": "Open group",
+    "fileName": "File",
+    "fileSize": "Size",
+    "fileDate": "Published",
+    "download": "Download",
+    "sourceArticle": "Source article",
+    "noFiles": "No files in this group yet",
+    "backToDownloads": "Back to downloads"
   }
 }

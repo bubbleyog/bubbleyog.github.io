@@ -2,6 +2,7 @@
   "siteName": "Blog",
   "nav": {
     "home": "首页",
+    "downloads": "下载",
     "about": "关于"
   },
   "common": {
@@ -53,5 +54,18 @@
     "aboutMe": "关于我",
     "contact": "联系方式",
     "contactIntro": "如果你对我的文章有任何问题或建议，欢迎通过以下方式联系我："
+  },
+  "downloads": {
+    "pageTitle": "下载",
+    "pageTitleKeyword": "中心",
+    "pageDescription": "物理课程讲义与相关资料的下载",
+    "viewGroup": "进入分组",
+    "fileName": "文件名",
+    "fileSize": "大小",
+    "fileDate": "发布日期",
+    "download": "下载",
+    "sourceArticle": "来源文章",
+    "noFiles": "该分组下暂无文件",
+    "backToDownloads": "返回下载中心"
   }
 }
