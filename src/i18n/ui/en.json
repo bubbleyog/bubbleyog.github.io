@@ -1,5 +1,5 @@
 {
-  "siteName": "BubbleYog",
+  "siteName": "Blog",
   "nav": {
     "home": "Home",
     "downloads": "Downloads",
@@ -17,8 +17,7 @@
     "languageToggle": "中文"
   },
   "hero": {
-    "title": "BubbleYog",
-    "subtitleLine1": "One of the myriad avatars of the great Yog-Sothoth",
+    "title": "Quallucan",
     "subtitleLine2": "On physics, computing, and deep learning"
   },
   "research": {

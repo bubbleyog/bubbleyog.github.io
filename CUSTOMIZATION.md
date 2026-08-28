@@ -7,7 +7,7 @@
 ## 📁 文件结构
 
 ```
-bubbleyog/
+quallucan/
 ├── src/
 │   ├── components/          # 组件文件夹
 │   │   ├── Header.astro         # 导航头部
@@ -122,7 +122,7 @@ export const articles = [
 #### 第三步：提交并推送
 
 ```bash
-cd bubbleyog
+cd quallucan
 git add .
 git commit -m "添加新文章：文章标题"
 git push origin main
@@ -169,7 +169,7 @@ export const categories = {
 
 ```bash
 # 修改文章
-cd bubbleyog
+cd quallucan
 # 编辑 src/content/articles/xxx.md
 
 git add .
@@ -296,7 +296,7 @@ body {
 
 ```bash
 # 进入项目目录
-cd bubbleyog
+cd quallucan
 
 # 添加所有修改
 git add .

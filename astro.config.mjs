@@ -3,7 +3,7 @@ import { defineConfig } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://bubbleyog.github.io',
+  site: 'https://quallucan.github.io',
   output: 'static',
   i18n: {
     defaultLocale: 'zh',
